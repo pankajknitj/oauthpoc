@@ -10,7 +10,7 @@
 	<groupId>com.rgbpvt</groupId>
 	<artifactId>oauthpoc-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>rgbpvt-client</name>
+	<name>oauthpoc-client</name>
 	<description>Demo project for Spring Boot</description>
 	<dependencies>
 		<dependency>

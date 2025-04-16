@@ -10,7 +10,7 @@
 	<groupId>com.rgbpvt</groupId>
 	<artifactId>oauthpoc-resource-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>resource-server</name>
+	<name>oauthpoc-resource-server</name>
 	<description>Resource server for RGBPVT</description>
 
 	<dependencies>
