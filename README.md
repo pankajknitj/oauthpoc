@@ -87,6 +87,12 @@ because spring security consider only object of GrantedAuthority
                 .build();
     }
 
+## Client registration with properties
+	spring.security.oauth2.client.registration.github.client-id=""
+	spring.security.oauth2.client.registration.github.client-secret=""
+
+	it will register a client with id github in registry
+
 ### Configuration server as client to get token internally using client_credential grant type flow
 - Along with the Client registration configuration, we have to configure ClientManager with a ClientProvider.
   - While setting up the provider we have to define which grant type flow it will for.
