@@ -91,7 +91,9 @@ because spring security consider only object of GrantedAuthority
 	spring.security.oauth2.client.registration.github.client-id=""
 	spring.security.oauth2.client.registration.github.client-secret=""
 
-	it will register a client with id github in registry
+	it will register a client with id github in registry.
+    Note: Both the configuration will not work simultanously as we are defining
+    our own clientRegistrationRepository
 
 ### Configuration server as client to get token internally using client_credential grant type flow
 - Along with the Client registration configuration, we have to configure ClientManager with a ClientProvider.

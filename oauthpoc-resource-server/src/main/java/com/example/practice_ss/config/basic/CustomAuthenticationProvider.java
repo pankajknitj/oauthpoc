@@ -1,5 +1,7 @@
 package com.example.practice_ss.config.basic;
 
+import com.example.practice_ss.config.basic.factory.UserDetailsServiceFactory;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,10 +21,17 @@ import static com.example.practice_ss.constans.ApplicationConstants.BASIC_AUTH;
 public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     @Autowired
-    UserDetailsService userDetailsService;
+    UserDetailsServiceFactory userDetailsServiceFactory;
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    private UserDetailsService userDetailsService;
+
+    @PostConstruct
+    void init(){
+        this.userDetailsService = userDetailsServiceFactory.getUseDetailsService();
+    }
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {

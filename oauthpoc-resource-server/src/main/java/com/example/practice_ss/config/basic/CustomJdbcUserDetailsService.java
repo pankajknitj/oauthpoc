@@ -19,7 +19,7 @@ import static com.example.practice_ss.constans.ApplicationConstants.BASIC_AUTH;
 
 @Profile(BASIC_AUTH)
 @Component
-public class CustomUserDetailsManager implements UserDetailsManager {
+public class CustomJdbcUserDetailsService implements UserDetailsManager {
     @Autowired
     private CustomerRepo customerRepo;
     @Autowired
