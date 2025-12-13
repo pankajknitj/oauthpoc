@@ -42,6 +42,7 @@ public class HttpSecurityService {
         return http;
     }
 
+    /*CORS configuration, required when UI and Backend running on different servers*/
     private CorsConfigurationSource getCorsConfiguration(){
         return new CorsConfigurationSource() {
             @Override
@@ -57,6 +58,7 @@ public class HttpSecurityService {
     }
 
 
+    /*Responsible for oauth login flow*/
     public void configureOauth2Login(HttpSecurity http) throws Exception {
         http.oauth2Login(oc -> oc.defaultSuccessUrl("/myCards",true)
                 .userInfoEndpoint(userInfo ->
@@ -65,6 +67,7 @@ public class HttpSecurityService {
         );
     }
 
+    /*Responsible to make application as resource server, it requires a JWT role converter, so that it can validate the roles*/
     public void configureResourceServer(HttpSecurity http) throws Exception {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());

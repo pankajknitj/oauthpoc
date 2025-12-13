@@ -21,8 +21,15 @@ public class TokenController {
     private final OAuth2AuthorizedClientService auth2AuthorizedClientService;
     private final TokenService tokenService;
 
+    /*Returns the access token of the currently logged-in user
+    * Browser → Keycloak/Google Login
+        → Redirect back with code
+        → Spring exchanges code for tokens
+        → Tokens stored in session (AuthorizedClientService)*/
+
     @GetMapping("/token")
     public ResponseEntity<?> getToken(){
+
         OAuth2AuthenticationToken authenticationToken = getAuthentication();
         String token = "";
         if(authenticationToken != null){
@@ -34,9 +41,9 @@ public class TokenController {
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 
+    /*Dynamically fetch the token from auth server for client-credential flow, no user involved.*/
     @GetMapping("/google-token")
     public ResponseEntity<?> getGoogleToken(OAuth2AuthenticationToken authentication){
-
 
         return ResponseEntity.status(HttpStatus.OK).body(tokenService.getAccessToken());
     }

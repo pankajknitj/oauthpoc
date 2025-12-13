@@ -11,6 +11,9 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.*;
+/*oAuth login will store the Oidc (open id connect) user mapped with jsession id for further authorization,
+* default oidc user doesnt holds the roles coming from auth server,
+* so, this the custom implementation to issue new oidc user with roles*/
 
 public class KeycloakOIDCUserService extends OidcUserService {
 

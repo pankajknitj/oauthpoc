@@ -24,27 +24,24 @@ import org.springframework.security.web.SecurityFilterChain;
 public class Oauth2Config {
     private final String KEYCLOAK = "keycloak";
 
-//    @Autowired
-//    private List<ClientRegistration> clientRegistrationRepositories;
-
     @Autowired
     private Environment environment;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request.anyRequest().authenticated())
-//                .formLogin(Customizer.withDefaults())
-                .oauth2Login(Customizer.withDefaults());
+        http.authorizeHttpRequests(request -> request.anyRequest().permitAll())
+                .oauth2Login(Customizer.withDefaults())
+                ;
 
         return http.build();
     }
 
     @Bean
     public ClientRegistrationRepository clientRegistration() {
-        return new InMemoryClientRegistrationRepository(keyckloakClientRegistration(),googleClientRegistration(),keycloakClientRegistrationInternal());
+        return new InMemoryClientRegistrationRepository(keyckloakClientRegistration(),googleClientRegistration());
     }
 
-    @Bean
+
     public ClientRegistration keyckloakClientRegistration() {
         String clientId = environment.getProperty("application.security.keycloak.client-id");
         String clientSecret = environment.getProperty("application.security.keycloak.client-secret");
@@ -71,31 +68,6 @@ public class Oauth2Config {
                 .build();
     }
 
-    private ClientRegistration keycloakClientRegistrationInternal() {
-        String clientId = environment.getProperty("application.security.keycloak.client-id");
-        String clientSecret = environment.getProperty("application.security.keycloak.client-secret");
-        String tokenUri = environment.getProperty("application.security.keycloak.token-uri");
-        String authUri = environment.getProperty("application.security.keycloak.auth-uri");
-        String issuerUri = environment.getProperty("application.security.keycloak.issuer-uri");
-        String userInfoUri = environment.getProperty("application.security.keycloak.userInfo-uri");
-        String jwkSetUri = environment.getProperty("application.security.keycloak.jwks-uri");
-        String redirectUri = "{baseUrl}/login/oauth2/code/{registrationId}";
-
-        return ClientRegistration.withRegistrationId("keycloak_internal")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                .redirectUri(redirectUri)
-                .scope(new String[]{"openid", "email"})
-                .issuerUri(issuerUri)
-                .userInfoUri(userInfoUri)
-                .jwkSetUri(jwkSetUri)
-                .userNameAttributeName("preferred_username")
-                .clientId(clientId)
-                .clientSecret(clientSecret)
-                .tokenUri(tokenUri)
-                .authorizationUri(authUri)
-                .build();
-    }
 
     private ClientRegistration googleClientRegistration(){
         return CommonOAuth2Provider.GOOGLE
@@ -105,6 +77,12 @@ public class Oauth2Config {
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .build();
     }
+
+    /*Auth2AuthorizedClientManager is responsible for:
+        Selecting the OAuth2 flow
+        Fetching a token if none exists
+        Refreshing the token automatically
+        Storing the token (in-memory / JDBC)*/
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/* purpose of this to extract the roles from token, so that resource it can be use for api access.
+* This is only required in resource server config.*/
 public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
     @Override
     public Collection<GrantedAuthority> convert(Jwt source) {

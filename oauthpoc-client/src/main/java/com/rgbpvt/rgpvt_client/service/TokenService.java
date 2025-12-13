@@ -6,6 +6,18 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.stereotype.Service;
 
+/*Dynamically fetch the token from auth server for client-credential flow, no user involved.
+* authorize()
+ └── find existing token?
+     ├── yes → return it
+     └── no
+         └── client_credentials flow
+             └── POST /token
+                 └── client_id + client_secret
+                     └── access_token
+* Majorly this use to fetch resources from the different auth server, it not mandatory client-credential, it can be authorization-code flow*/
+
+
 @Service
 public class TokenService {
     @Autowired
