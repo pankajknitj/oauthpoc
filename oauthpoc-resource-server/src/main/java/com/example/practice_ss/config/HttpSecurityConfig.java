@@ -3,7 +3,6 @@ package com.example.practice_ss.config;
 
 import com.example.practice_ss.constans.ApplicationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -28,13 +27,13 @@ public class HttpSecurityConfig {
 
         List<String> activeProfiles = Arrays.asList(environment.getActiveProfiles());
 
-        if(activeProfiles.contains(ApplicationConstants.OAUTH2)){
+        if(activeProfiles.contains(ApplicationConstants.BASIC_AUTH)){
             httpSecurityService.configureRequiredFilters(http);
             httpSecurityService.configureFormLogin(http);
             httpSecurityService.configureBasicAuthentication(http);
         }
 
-        if(activeProfiles.contains(ApplicationConstants.BASIC_AUTH)){
+        if(activeProfiles.contains(ApplicationConstants.OAUTH2)){
             httpSecurityService.configureOauth2Login(http);
             httpSecurityService.configureResourceServer(http);
         }
