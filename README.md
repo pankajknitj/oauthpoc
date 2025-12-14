@@ -142,7 +142,107 @@ because spring security consider only object of GrantedAuthority
 - Like here i have registered 2 keycloak client with registration-id "keycloak" & "keycloak_internal"
  
 
+# oauthpoc-client — Documentation (top to bottom)
+
+## Overview
+- Spring Boot OAuth2 client demo.
+- Shows: OAuth2 login (authorization_code), programmatic token acquisition (client_credentials), and a token REST endpoint.
+
+## `config/Oauth2Config.java`
+- Registers clients (properties or in-memory).
+  - Builds `OAuth2AuthorizedClientManager` for programmatic token flow.
+
+         @Bean
+        public OAuth2AuthorizedClientManager authorizedClientManager(
+        ClientRegistrationRepository clientRegistrationRepository,
+        OAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+          OAuth2AuthorizedClientProvider authorizedClientProvider =
+                  OAuth2AuthorizedClientProviderBuilder.builder()
+                          .clientCredentials()
+                          .refreshToken()  // optional, if you want refresh tokens
+                          .build();
+
+          DefaultOAuth2AuthorizedClientManager authorizedClientManager =
+                  new DefaultOAuth2AuthorizedClientManager(
+                          clientRegistrationRepository,
+                          authorizedClientRepository);
+
+          authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+          return authorizedClientManager;
+    }
+
+## `controller/TokenController.java`
+    /*Returns the access token of the currently logged-in user
+    * Browser → Keycloak/Google Login
+        → Redirect back with code
+        → Spring exchanges code for tokens
+        → Tokens stored in session (AuthorizedClientService)*/
+
+    @GetMapping("/token")
+    public ResponseEntity<?> getToken(){
+
+        OAuth2AuthenticationToken authenticationToken = getAuthentication();
+        String token = "";
+        if(authenticationToken != null){
+            OAuth2AuthorizedClient authorizedClient = auth2AuthorizedClientService
+                    .loadAuthorizedClient(authenticationToken.getAuthorizedClientRegistrationId(), authenticationToken.getName());
+            token = authorizedClient.getAccessToken().getTokenValue();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(token);
+    }
+
+    /*Dynamically fetch the token from auth server for client-credential flow, no user involved.*/
+    @GetMapping("/google-token")
+    public ResponseEntity<?> getGoogleToken(OAuth2AuthenticationToken authentication){
+
+        return ResponseEntity.status(HttpStatus.OK).body(tokenService.getAccessToken());
+    }
 
 
+    private OAuth2AuthenticationToken getAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication instanceof OAuth2AuthenticationToken){
+            return (OAuth2AuthenticationToken) authentication;
+        }
+        return null;
+    }
 
-# oauthpoc
+## `service/TokenService.java`
+- Programmatically request access token for a registered client id (e.g., `keycloak_internal`).
+
+      * authorize()
+        └── find existing token?
+          ├── yes → return it
+          └── no
+            └── client_credentials flow
+              └── POST /token
+                └── client_id + client_secret
+                  └── access_token
+        * Majorly this use to fetch resources from the different auth server, it not mandatory client-credential, it can be authorization-code flow*/
+    
+    
+    @Service
+    public class TokenService {
+    @Autowired
+    private OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager;
+
+    public String getAccessToken(){
+        OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
+                .withClientRegistrationId("keycloak_internal")
+                .principal("system-app")
+                .build();
+
+        OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientManager.authorize(authorizeRequest);
+        if (authorizedClient == null || authorizedClient.getAccessToken() == null) {
+            throw new IllegalStateException("User is not authorized or access token is missing");
+        }
+
+        return authorizedClient.getAccessToken().getTokenValue();
+    }
+
+    }
+
+# End of `README.md`
+
