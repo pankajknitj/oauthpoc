@@ -1,4 +1,4 @@
-package com.example.practice_ss.config.oauth;
+package com.example.practice_ss.security.service;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;

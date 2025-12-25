@@ -1,11 +1,10 @@
-package com.example.practice_ss.config;
+package com.example.practice_ss.security.service;
 
-import com.example.practice_ss.config.oauth.KeycloakOIDCUserService;
-import com.example.practice_ss.config.oauth.KeycloakRoleConverter;
 import com.example.practice_ss.exception.AccessDeniedHandler;
 import com.example.practice_ss.exception.AuthenticationEntryPoint;
 import com.example.practice_ss.filters.LoggingFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -14,13 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collection;
 import java.util.Collections;
 
 import static com.example.practice_ss.constans.Paths.*;
 
 @Service
 public class HttpSecurityService {
+
+    @Autowired(required = false)
+    private KeycloakOIDCUserService keycloakOIDCUserService;
 
     public HttpSecurity applyCommonConfig(HttpSecurity http) throws Exception {
         /*common configuration used in all type of authentication
@@ -62,7 +63,7 @@ public class HttpSecurityService {
     public void configureOauth2Login(HttpSecurity http) throws Exception {
         http.oauth2Login(oc -> oc.defaultSuccessUrl("/myCards",true)
                 .userInfoEndpoint(userInfo ->
-                        userInfo.oidcUserService(new KeycloakOIDCUserService())
+                        userInfo.oidcUserService(keycloakOIDCUserService)
                 )
         );
     }

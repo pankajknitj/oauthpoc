@@ -1,8 +1,7 @@
-package com.example.practice_ss.config.basic;
+package com.example.practice_ss.security.config.basic;
 
-import com.example.practice_ss.config.HttpSecurityService;
-import com.example.practice_ss.exception.AuthenticationEntryPoint;
-import com.example.practice_ss.filters.LoggingFilter;
+import com.example.practice_ss.security.service.CustomJdbcUserDetailsService;
+import com.example.practice_ss.security.service.HttpSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,11 +17,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.sql.DataSource;
-import java.net.http.HttpRequest;
 
 import static com.example.practice_ss.constans.ApplicationConstants.BASIC_AUTH;
 
@@ -34,11 +28,6 @@ import static com.example.practice_ss.constans.ApplicationConstants.BASIC_AUTH;
 @RequiredArgsConstructor
 public class CustomSecurityConfig {
     private final HttpSecurityService httpSecurityService;
-
-    @Bean
-    PasswordEncoder defaultPasswordEncoder(){
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationProvider provider){

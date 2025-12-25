@@ -1,7 +1,8 @@
-package com.example.practice_ss.config;
+package com.example.practice_ss.security.config.common;
 
 
 import com.example.practice_ss.constans.ApplicationConstants;
+import com.example.practice_ss.security.service.HttpSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

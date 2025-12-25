@@ -19,6 +19,7 @@
   <modules>
     <module>oauthpoc-resource-server</module>
     <module>oauthpoc-client</module>
+    <module>auth-server</module>
   </modules>
   <properties>
     <java.version>17</java.version>

@@ -1,4 +1,4 @@
-package com.example.practice_ss.config.basic.factory;
+package com.example.practice_ss.security.config.basic.factory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

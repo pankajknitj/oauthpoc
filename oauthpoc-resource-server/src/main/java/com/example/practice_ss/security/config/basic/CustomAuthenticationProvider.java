@@ -1,6 +1,6 @@
-package com.example.practice_ss.config.basic;
+package com.example.practice_ss.security.config.basic;
 
-import com.example.practice_ss.config.basic.factory.UserDetailsServiceFactory;
+import com.example.practice_ss.security.config.basic.factory.UserDetailsServiceFactory;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;

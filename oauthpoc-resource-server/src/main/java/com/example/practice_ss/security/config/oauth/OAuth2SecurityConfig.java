@@ -1,4 +1,4 @@
-package com.example.practice_ss.config.oauth;
+package com.example.practice_ss.security.config.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

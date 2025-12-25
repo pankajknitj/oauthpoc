@@ -1,4 +1,4 @@
-package com.example.practice_ss.config.basic;
+package com.example.practice_ss.security.service;
 
 import com.example.practice_ss.model.Customer;
 import com.example.practice_ss.repo.CustomerRepo;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.example.practice_ss.constans.ApplicationConstants.BASIC_AUTH;
 
-@Profile(BASIC_AUTH)
+/*Custom implementation to manage user, used in all type of authentication*/
 @Component
 public class CustomJdbcUserDetailsService implements UserDetailsManager {
     @Autowired
